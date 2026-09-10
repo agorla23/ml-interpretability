@@ -201,7 +201,12 @@ def _imputation_choice(raw_profile: dict, column: str, effective_type: str) -> I
     before imputation. Constant imputation and an indicator therefore remain the
     policy for target-informative but non-extreme missingness.
     """
-    if float(_profile_value(raw_profile, column, "missing_pct", 0.0) or 0.0) == 0.0:
+    has_missing = _profile_value(raw_profile, column, "has_missing", None)
+    if has_missing is None:
+        # Backward compatibility for persisted profiles created before the
+        # unrounded missingness flag was added.
+        has_missing = float(_profile_value(raw_profile, column, "missing_pct", 0.0) or 0.0) > 0.0
+    if not bool(has_missing):
         return "none"
 
     missingness_informative = bool(_profile_value(raw_profile, column, "missingness_informative", False))
@@ -335,6 +340,7 @@ def derive_column_plan_defaults(
         evidence_keys.extend(
             [
                 _profile_key(column, "missing_pct"),
+                _profile_key(column, "has_missing"),
                 _profile_key(column, "missingness_informative"),
                 _profile_key(column, "is_skewed"),
                 _profile_key(column, "top_category_pct"),

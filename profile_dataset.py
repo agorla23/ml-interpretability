@@ -355,6 +355,7 @@ def profile_dataset(df: pd.DataFrame, target_column: str, task_type: str) -> dic
         is_numeric = _is_numeric(column)
         is_categorical = _is_categorical(column)
         nunique = int(column.nunique(dropna=True))
+        has_missing = bool(column.isna().any())
         missing_pct = round(float(column.isna().mean() * 100.0), 2) if n_rows else None
         corr_with_target = (
             None if column_name == target_column else _correlation_with_target(column, target, target_is_numeric)
@@ -377,6 +378,7 @@ def profile_dataset(df: pd.DataFrame, target_column: str, task_type: str) -> dic
         result[f"{prefix}dtype"] = str(column.dtype)
         result[f"{prefix}nunique"] = nunique
         result[f"{prefix}missing_pct"] = missing_pct
+        result[f"{prefix}has_missing"] = has_missing
         result[f"{prefix}mean"] = mean
         result[f"{prefix}std"] = std
         result[f"{prefix}min"] = _as_float_or_none(column.min()) if is_numeric else None

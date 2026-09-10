@@ -92,3 +92,23 @@ def test_boolean_indicator_is_profiled_as_categorical_not_numeric() -> None:
     assert profile["col:DAYS_EMPLOYED_ANOM:iqr_outlier_pct"] is None
     assert profile["col:DAYS_EMPLOYED_ANOM:vif"] is None
     assert profile["col:DAYS_EMPLOYED_ANOM:top_category_pct"] == 75.0
+
+
+def test_rare_missing_value_is_not_lost_to_display_rounding() -> None:
+    rows = 50_000
+    frame = pd.DataFrame(
+        {
+            "CNT_FAM_MEMBERS": [index % 20 for index in range(rows - 1)] + [None],
+            "TARGET": [index % 2 for index in range(rows)],
+        }
+    )
+
+    profile = profile_dataset(frame, "TARGET", "binary")
+    defaults = {
+        default.column: default
+        for default in derive_column_plan_defaults(profile, "TARGET")
+    }
+
+    assert profile["col:CNT_FAM_MEMBERS:missing_pct"] == 0.0
+    assert profile["col:CNT_FAM_MEMBERS:has_missing"] is True
+    assert defaults["CNT_FAM_MEMBERS"].imputation == "mean"
