@@ -29,7 +29,11 @@ def _as_float_or_none(value: Any) -> float | None:
 
 
 def _is_numeric(series: pd.Series) -> bool:
-    return pd.api.types.is_numeric_dtype(series)
+    # Pandas considers bool numeric, but IQR/VIF statistics require quantities.
+    return bool(
+        pd.api.types.is_numeric_dtype(series)
+        and not pd.api.types.is_bool_dtype(series)
+    )
 
 
 def _is_categorical(series: pd.Series) -> bool:
