@@ -1,0 +1,16 @@
+{
+  "benchmark": {
+    "cache_filename": "wine_quality_red.csv",
+    "display_name": "UCI Wine Quality (red wine)",
+    "name": "wine_quality",
+    "source": "https://archive.ics.uci.edu/static/public/186/wine+quality.zip",
+    "target_column": "quality",
+    "task_type": "multiclass"
+  },
+  "cache_path": "benchmarks/wine_quality_red.csv",
+  "cache_sha256": "75dde1403d5f0a18f02c21371fd1f7b23f54866d8009639c81d4a1dde0db8060",
+  "n_cols": 12,
+  "n_rows": 1599,
+  "source_path": "/Users/akhilgorla/Downloads/winequality-red.csv",
+  "source_sha256": "d6a0d9bd24806944818795f22500c46cb6424cbff517aacda36595d3ed9b2daa"
+}

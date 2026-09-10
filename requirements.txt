@@ -1,0 +1,8 @@
+pandas
+numpy
+scipy
+statsmodels
+anthropic
+scikit-learn
+xgboost
+langgraph

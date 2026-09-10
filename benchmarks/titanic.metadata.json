@@ -1,0 +1,16 @@
+{
+  "benchmark": {
+    "cache_filename": "titanic.csv",
+    "display_name": "Titanic",
+    "name": "titanic",
+    "source": "https://www.openml.org/data/get_csv/16826755/phpMYEkMl",
+    "target_column": "survived",
+    "task_type": "binary"
+  },
+  "cache_path": "benchmarks/titanic.csv",
+  "cache_sha256": "b83ab0b5169ceb660a97f1157bde0951fa7bedfe492ae6686ce8e80a3ff94877",
+  "n_cols": 14,
+  "n_rows": 1309,
+  "source_path": "benchmarks/sources/titanic.csv",
+  "source_sha256": "c617db2c7470716250f6f001be51304c76bcc8815527ab8bae734bdca0735737"
+}

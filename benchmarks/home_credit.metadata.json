@@ -1,0 +1,16 @@
+{
+  "benchmark": {
+    "cache_filename": "home_credit_50k.csv",
+    "display_name": "Home Credit Default Risk",
+    "name": "home_credit",
+    "source": "Kaggle Home Credit application_train.csv; deterministic 50k-row sample",
+    "target_column": "TARGET",
+    "task_type": "binary"
+  },
+  "cache_path": "benchmarks/home_credit_50k.csv",
+  "cache_sha256": "2f53b5124c868e90e3111996d95552ded8480936a350cc122c3bcd192560d1b9",
+  "n_cols": 122,
+  "n_rows": 50000,
+  "source_path": "benchmarks/sources/application_train.csv.zip",
+  "source_sha256": "64289b17dd316a4106a2e3fe8d37f17ca6e16729e45989e86944049b7fb9050f"
+}

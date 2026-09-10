@@ -1,0 +1,25 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Python tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Downloaded benchmark data and generated benchmark metadata
+benchmarks/*.csv
+benchmarks/*.zip
+benchmarks/sources/
+benchmarks/preflight_report.json
+benchmarks/preregistered_plans.json
+
+# Generated pipeline artifacts and ad hoc analysis output
+runs/
+*.jsonl
+*_output.txt

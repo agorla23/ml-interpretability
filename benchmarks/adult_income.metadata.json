@@ -1,0 +1,16 @@
+{
+  "benchmark": {
+    "cache_filename": "adult_income.csv",
+    "display_name": "UCI Adult Income",
+    "name": "adult_income",
+    "source": "https://archive.ics.uci.edu/static/public/2/adult.zip",
+    "target_column": "income",
+    "task_type": "binary"
+  },
+  "cache_path": "benchmarks/adult_income.csv",
+  "cache_sha256": "ce5feb731adaef81b15c3dc42dbe982fec8f47700711d60760bc752b4079bf9e",
+  "n_cols": 15,
+  "n_rows": 48842,
+  "source_path": "benchmarks/sources/adult.zip",
+  "source_sha256": "7537312dd56c2b98035880805ce99e68183a30ee468aa5329d6df0fbb3cc21bb"
+}

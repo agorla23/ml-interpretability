@@ -1,0 +1,16 @@
+{
+  "benchmark": {
+    "cache_filename": "ames_housing.csv",
+    "display_name": "Ames Housing",
+    "name": "ames_housing",
+    "source": "https://www.openintro.org/data/csv/ames.csv",
+    "target_column": "price",
+    "task_type": "regression"
+  },
+  "cache_path": "benchmarks/ames_housing.csv",
+  "cache_sha256": "89d657b07b7bfa43ef1a6cf3ed9ed9f16d19e240d540faebbe94f32cfbcb5064",
+  "n_cols": 82,
+  "n_rows": 2930,
+  "source_path": "benchmarks/sources/ames.csv",
+  "source_sha256": "cce822e6d71812f6edcf9d34bf42a2d65b927702c99ac4e6bcf20e5759d7be11"
+}
