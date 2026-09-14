@@ -20,6 +20,7 @@ import numpy as np
 from benchmark_datasets import BENCHMARKS, DEFAULT_BENCHMARK_DIR, load_benchmark
 from pipeline_supervisor import PipelineState, run_supervised_pipeline
 from preprocessing_agent import preprocessing_batch_count
+from synthetic_corruptions import inject_synthetic_corruptions, synthetic_corruption_report
 
 
 Arm = Literal["ab", "c"]
@@ -63,12 +64,12 @@ class ExperimentRun:
 
 
 def planned_runs() -> list[ExperimentRun]:
-    """Return the pre-registered 40-execution matrix without running it."""
+    """Return the pre-registered Arm A/B and single-run Arm C matrix."""
     runs: list[ExperimentRun] = []
     for dataset in BENCHMARKS:
-        for arm in ("ab", "c"):
-            runs.extend(ExperimentRun(dataset, arm, 0.0, repeat) for repeat in (1, 2, 3))
-            runs.append(ExperimentRun(dataset, arm, 0.7, 1))
+        runs.extend(ExperimentRun(dataset, "ab", 0.0, repeat) for repeat in (1, 2, 3))
+        runs.append(ExperimentRun(dataset, "ab", 0.7, 1))
+        runs.append(ExperimentRun(dataset, "c", 0.0, 1))
     return runs
 
 
@@ -434,9 +435,11 @@ def run_experiment(
     """Run one explicitly selected arm after enforcing pre-registration."""
     if experiment.temperature not in {0.0, 0.7}:
         raise ValueError("Milestone 9 temperatures are fixed at 0.0 and 0.7")
-    if experiment.temperature == 0.0 and experiment.repeat not in {1, 2, 3}:
+    if experiment.arm == "c" and (experiment.temperature != 0.0 or experiment.repeat != 1):
+        raise ValueError("Arm C has exactly one temperature=0.0 run per dataset")
+    if experiment.arm == "ab" and experiment.temperature == 0.0 and experiment.repeat not in {1, 2, 3}:
         raise ValueError("temperature=0.0 repeats must be 1, 2, or 3")
-    if experiment.temperature == 0.7 and experiment.repeat != 1:
+    if experiment.arm == "ab" and experiment.temperature == 0.7 and experiment.repeat != 1:
         raise ValueError("temperature=0.7 has exactly one variance-check run")
     preregistration, preregistration_sha = validate_preregistration(preregistration_path)
     spec, source_frame, source_dataset_path = load_benchmark(
@@ -460,11 +463,11 @@ def run_experiment(
     dataset_path = source_dataset_path
     added_columns: list[str] = []
     if experiment.arm == "c":
-        if plant_defects is None:
-            raise ValueError("Arm C requires the user-supplied plant_defects function")
-        planted_frame = plant_defects(frame.copy(deep=True), spec.target_column, spec.task_type)
+        injector = plant_defects or inject_synthetic_corruptions
+        planted_frame = injector(frame.copy(deep=True), spec.target_column, spec.task_type)
         added_columns = _validate_planted_frame(frame, planted_frame, spec.target_column)
         frame = planted_frame
+        _write_json(run_dir / "synthetic_corruption.json", synthetic_corruption_report(frame, spec.target_column).to_dict())
     if manual_corrections or experiment.arm == "c":
         dataset_path = run_dir / "input_dataset.csv"
         frame.to_csv(dataset_path, index=False)
@@ -507,7 +510,16 @@ def run_experiment(
         _write_json(run_dir / "preregistration_comparison.json", comparison)
     else:
         planted = _identify_planted_defects(state.raw_profile or {}, added_columns)
-        _write_json(run_dir / "arm_c_recall.json", _arm_c_recall(state, planted))
+        recall = _arm_c_recall(state, planted)
+        _write_json(run_dir / "arm_c_recall.json", recall)
+        corruption = synthetic_corruption_report(frame, spec.target_column).to_dict()
+        corruption["profile"] = {
+            "leaked_corr_with_target": (state.raw_profile or {}).get("col:SYNTH_LEAKED:corr_with_target"),
+            "constant_is_constant": (state.raw_profile or {}).get("col:SYNTH_CONSTANT:is_constant"),
+            "leaked_leakage_suspect": (state.raw_profile or {}).get("col:SYNTH_LEAKED:leakage_suspect"),
+            "high_missing_has_high_missing": (state.raw_profile or {}).get("col:SYNTH_HIGH_MISSING:has_high_missing"),
+        }
+        _write_json(run_dir / "synthetic_corruption.json", corruption)
     return state
 
 
@@ -817,9 +829,7 @@ def main() -> int:
     experiment = ExperimentRun(args.dataset, args.arm, args.temperature, args.repeat)
     defect_function = None
     if args.arm == "c":
-        if not args.defect_module:
-            parser.error("Arm C requires --defect-module")
-        defect_function = _load_defect_function(args.defect_module, args.dataset)
+        defect_function = _load_defect_function(args.defect_module, args.dataset) if args.defect_module else None
     state = run_experiment(
         experiment,
         preregistration_path=args.preregistration,

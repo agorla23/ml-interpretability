@@ -25,14 +25,53 @@ from benchmark_experiments import (
 )
 from evidence_validator import EvidenceRef
 from pipeline_supervisor import compute_call_cap
+from preprocessing_agent import derive_column_plan_defaults
+from profile_dataset import profile_dataset
+from synthetic_corruptions import (
+    HIGH_MISSING_FRACTION,
+    SYNTH_CONSTANT,
+    SYNTH_HIGH_MISSING,
+    SYNTH_LEAKED,
+    TARGET_LEAK_CORRELATION,
+    inject_synthetic_corruptions,
+    synthetic_corruption_report,
+)
 
 
-def test_fixed_matrix_has_40_unique_executions() -> None:
+def test_fixed_matrix_has_25_unique_executions() -> None:
     runs = planned_runs()
-    assert len(runs) == 40
-    assert len({run.run_id for run in runs}) == 40
+    assert len(runs) == 25
+    assert len({run.run_id for run in runs}) == 25
     assert sum(run.arm == "ab" for run in runs) == 20
-    assert sum(run.arm == "c" for run in runs) == 20
+    assert sum(run.arm == "c" for run in runs) == 5
+    assert all(run.temperature == 0.0 and run.repeat == 1 for run in runs if run.arm == "c")
+
+
+def test_titanic_arm_c_injection_is_reproducible_and_measured() -> None:
+    frame = pd.read_csv("benchmarks/titanic.csv")
+    first = inject_synthetic_corruptions(frame, "survived", "binary")
+    second = inject_synthetic_corruptions(frame, "survived", "binary")
+    report = synthetic_corruption_report(first, "survived")
+    profile = profile_dataset(first, "survived", "binary")
+    defaults = {
+        default.column: default
+        for default in derive_column_plan_defaults(profile, "survived")
+    }
+
+    assert first[[SYNTH_CONSTANT, SYNTH_LEAKED, SYNTH_HIGH_MISSING]].equals(
+        second[[SYNTH_CONSTANT, SYNTH_LEAKED, SYNTH_HIGH_MISSING]]
+    )
+    assert report.constant_nunique == 1
+    assert report.leaked_corr_with_target == pytest.approx(TARGET_LEAK_CORRELATION, abs=1e-12)
+    assert report.high_missing_pct == pytest.approx(
+        round(round(len(frame) * HIGH_MISSING_FRACTION) / len(frame) * 100.0, 12)
+    )
+    assert profile[f"col:{SYNTH_CONSTANT}:is_constant"] is True
+    assert profile[f"col:{SYNTH_LEAKED}:leakage_suspect"] is True
+    assert profile[f"col:{SYNTH_HIGH_MISSING}:has_high_missing"] is True
+    assert defaults[SYNTH_CONSTANT].drop_reason == "is_constant"
+    assert defaults[SYNTH_LEAKED].drop_reason == "leakage_suspect"
+    assert defaults[SYNTH_HIGH_MISSING].drop_reason == "has_high_missing"
 
 
 def test_call_caps_cover_preflight_upper_estimates_with_target_headroom() -> None:
