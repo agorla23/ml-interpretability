@@ -74,6 +74,21 @@ def test_titanic_arm_c_injection_is_reproducible_and_measured() -> None:
     assert defaults[SYNTH_HIGH_MISSING].drop_reason == "has_high_missing"
 
 
+def test_arm_c_categorical_target_leakage_is_profiled() -> None:
+    frame = pd.DataFrame(
+        {
+            "feature": range(1_000),
+            "income": [">50K" if index % 4 == 0 else "<=50K" for index in range(1_000)],
+        }
+    )
+
+    corrupted = inject_synthetic_corruptions(frame, "income", "binary")
+    profile = profile_dataset(corrupted, "income", "binary")
+
+    assert profile[f"col:{SYNTH_LEAKED}:corr_with_target"] > 0.95
+    assert profile[f"col:{SYNTH_LEAKED}:leakage_suspect"] is True
+
+
 def test_call_caps_cover_preflight_upper_estimates_with_target_headroom() -> None:
     estimates = {
         "home_credit": (122, 150, 9),

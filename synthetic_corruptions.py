@@ -47,27 +47,35 @@ def inject_synthetic_corruptions(
     target = frame[target_column]
     if target.isna().any():
         raise ValueError("Arm C synthetic leakage injection requires a complete target")
+    rng = np.random.default_rng(SYNTHETIC_CORRUPTION_SEED)
     numeric_target = pd.to_numeric(target, errors="coerce")
     if numeric_target.isna().any():
-        numeric_target = pd.Series(pd.factorize(target, sort=True)[0], index=target.index, dtype=float)
+        # Cramer's V requires discrete categories. A 0.5% label flip creates a
+        # near-perfect, but deliberately non-identical, categorical leak.
+        labels = target.astype(object).to_numpy(copy=True)
+        classes = list(pd.unique(target))
+        flip_rows = rng.choice(len(frame), size=max(1, round(len(frame) * 0.005)), replace=False)
+        for row in flip_rows:
+            labels[row] = next(label for label in classes if label != labels[row])
+        leaked = labels
+    else:
+        centered_target = numeric_target.to_numpy(dtype=float) - float(numeric_target.mean())
+        target_std = float(np.sqrt(np.mean(centered_target**2)))
+        if target_std == 0.0:
+            raise ValueError("Arm C numeric leakage injection requires target variance")
 
-    rng = np.random.default_rng(SYNTHETIC_CORRUPTION_SEED)
-    centered_target = numeric_target.to_numpy(dtype=float) - float(numeric_target.mean())
-    target_std = float(np.sqrt(np.mean(centered_target**2)))
-    if target_std == 0.0:
-        raise ValueError("Arm C binary leakage injection requires target variance")
-
-    noise = rng.standard_normal(len(frame))
-    noise -= noise.mean()
-    noise -= centered_target * (float(np.dot(noise, centered_target)) / float(np.dot(centered_target, centered_target)))
-    noise_std = float(np.sqrt(np.mean(noise**2)))
-    if noise_std == 0.0:
-        raise ValueError("Synthetic leakage noise unexpectedly has zero variance")
-    noise *= target_std * np.sqrt((1.0 / TARGET_LEAK_CORRELATION**2) - 1.0) / noise_std
+        noise = rng.standard_normal(len(frame))
+        noise -= noise.mean()
+        noise -= centered_target * (float(np.dot(noise, centered_target)) / float(np.dot(centered_target, centered_target)))
+        noise_std = float(np.sqrt(np.mean(noise**2)))
+        if noise_std == 0.0:
+            raise ValueError("Synthetic leakage noise unexpectedly has zero variance")
+        noise *= target_std * np.sqrt((1.0 / TARGET_LEAK_CORRELATION**2) - 1.0) / noise_std
+        leaked = numeric_target.to_numpy(dtype=float) + noise
 
     corrupted = frame.copy(deep=True)
     corrupted[SYNTH_CONSTANT] = 1
-    corrupted[SYNTH_LEAKED] = numeric_target.to_numpy(dtype=float) + noise
+    corrupted[SYNTH_LEAKED] = leaked
     high_missing = rng.normal(size=len(frame))
     missing_count = round(len(frame) * HIGH_MISSING_FRACTION)
     missing_rows = rng.choice(len(frame), size=missing_count, replace=False)
@@ -81,7 +89,11 @@ def synthetic_corruption_report(frame: pd.DataFrame, target_column: str) -> Synt
     target = frame[target_column]
     numeric_target = pd.to_numeric(target, errors="coerce")
     if numeric_target.isna().any():
-        numeric_target = pd.Series(pd.factorize(target, sort=True)[0], index=target.index, dtype=float)
+        categories = {value: index for index, value in enumerate(pd.unique(target))}
+        numeric_target = target.map(categories).astype(float)
+        leaked = frame[SYNTH_LEAKED].map(categories).astype(float)
+    else:
+        leaked = frame[SYNTH_LEAKED]
     return SyntheticCorruptionReport(
         seed=SYNTHETIC_CORRUPTION_SEED,
         columns={
@@ -90,6 +102,6 @@ def synthetic_corruption_report(frame: pd.DataFrame, target_column: str) -> Synt
             "high_missing": SYNTH_HIGH_MISSING,
         },
         constant_nunique=int(frame[SYNTH_CONSTANT].nunique(dropna=True)),
-        leaked_corr_with_target=float(frame[SYNTH_LEAKED].corr(numeric_target)),
+        leaked_corr_with_target=float(leaked.corr(numeric_target)),
         high_missing_pct=float(frame[SYNTH_HIGH_MISSING].isna().mean() * 100.0),
     )
