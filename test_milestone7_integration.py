@@ -17,7 +17,7 @@ from preprocessing_agent import derive_column_plan_defaults, run_preprocessing_a
 from profile_dataset import profile_dataset
 
 
-MINI_DATASET = Path("/Users/akhilgorla/Downloads/mini_dataset.csv")
+MINI_DATASET = Path(__file__).parent / "tests" / "fixtures" / "mini_dataset.csv"
 
 
 class FakeClient:

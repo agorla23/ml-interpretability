@@ -29,7 +29,7 @@ from preprocessing_pipeline import (
 from profile_dataset import profile_dataset
 
 
-MINI_DATASET = Path("/Users/akhilgorla/Downloads/mini_dataset.csv")
+MINI_DATASET = Path(__file__).parent / "tests" / "fixtures" / "mini_dataset.csv"
 AMES_DATASET = Path("benchmarks/ames_housing.csv")
 AMES_PROFILE = Path("benchmarks/profiles/ames_housing.json")
 HOME_CREDIT_DATASET = Path("benchmarks/home_credit_50k.csv")

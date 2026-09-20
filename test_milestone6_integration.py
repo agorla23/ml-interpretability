@@ -19,7 +19,7 @@ from preprocessing_persistence import persist_preprocessing_run
 from profile_dataset import profile_dataset
 
 
-MINI_DATASET = Path("/Users/akhilgorla/Downloads/mini_dataset.csv")
+MINI_DATASET = Path(__file__).parent / "tests" / "fixtures" / "mini_dataset.csv"
 
 
 class FakeMessages:

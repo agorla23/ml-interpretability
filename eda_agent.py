@@ -7,6 +7,7 @@ import json
 import os
 import sys
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Literal
 
 import pandas as pd
@@ -329,7 +330,7 @@ def main() -> int:
     parser.add_argument(
         "csv_path",
         nargs="?",
-        default="/Users/akhilgorla/Downloads/mini_dataset.csv",
+        default=str(Path(__file__).parent / "tests" / "fixtures" / "mini_dataset.csv"),
         help="CSV path to profile before running the EDA agent.",
     )
     parser.add_argument("--target-column", default="target")

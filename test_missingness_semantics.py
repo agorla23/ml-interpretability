@@ -16,7 +16,7 @@ from profile_dataset import (
 
 
 TITANIC_DATASET = Path("benchmarks/titanic.csv")
-MINI_DATASET = Path("/Users/akhilgorla/Downloads/mini_dataset.csv")
+MINI_DATASET = Path(__file__).parent / "tests" / "fixtures" / "mini_dataset.csv"
 
 
 def test_titanic_missingness_uses_target_association_and_drops_boat() -> None:

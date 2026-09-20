@@ -14,7 +14,7 @@ from preprocessing_agent import derive_column_plan_defaults
 from profile_dataset import profile_dataset
 
 
-DATASET = "/Users/akhilgorla/Downloads/mini_dataset.csv"
+DATASET = str(Path(__file__).parent / "tests" / "fixtures" / "mini_dataset.csv")
 
 
 class FakeAnthropic:
