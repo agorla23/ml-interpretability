@@ -9,6 +9,31 @@ from pathlib import Path
 import pandas as pd
 
 
+def checked_merge(
+    left: pd.DataFrame,
+    right: pd.DataFrame,
+    *,
+    context: str,
+    **kwargs: object,
+) -> pd.DataFrame:
+    """Merge and reject ambiguous or pandas-suffixed output columns."""
+    joined = left.merge(right, **kwargs)
+    duplicate_columns = sorted(
+        set(joined.columns[joined.columns.duplicated()].tolist())
+    )
+    suffixed_columns = sorted(
+        column
+        for column in joined.columns
+        if column.endswith("_x") or column.endswith("_y")
+    )
+    if duplicate_columns or suffixed_columns:
+        raise ValueError(
+            f"Ambiguous columns after {context}: "
+            f"duplicates={duplicate_columns}, pandas_suffixes={suffixed_columns}"
+        )
+    return joined
+
+
 def load_export(export_dir: Path) -> dict[str, pd.DataFrame]:
     manifest = json.loads((export_dir / "manifest.json").read_text(encoding="utf-8"))
     return {
@@ -25,19 +50,34 @@ def build_claims_enriched(tables: dict[str, pd.DataFrame]) -> pd.DataFrame:
     layer2 = tables["layer2_verdicts"][
         ["run_id", "claim_id", "layer2_score"]
     ]
-    return claims.merge(layer1, on=["run_id", "claim_id"], how="left").merge(
-        layer2, on=["run_id", "claim_id"], how="left"
+    claims_with_layer1 = checked_merge(
+        claims,
+        layer1,
+        context="claims-to-layer1 join",
+        on=["run_id", "claim_id"],
+        how="left",
+    )
+    return checked_merge(
+        claims_with_layer1,
+        layer2,
+        context="claims-to-layer2 join",
+        on=["run_id", "claim_id"],
+        how="left",
     )
 
 
 def gold_layer1_rates(tables: dict[str, pd.DataFrame]) -> pd.DataFrame:
-    rows = (
-        tables["layer1_evidence_verdicts"]
-        .merge(
-            tables["claims"][["run_id", "claim_id", "stage"]],
-            on=["run_id", "claim_id"],
-        )
-        .merge(tables["runs"][["run_id", "dataset"]], on="run_id")
+    rows = checked_merge(
+        tables["layer1_evidence_verdicts"],
+        tables["claims"][["run_id", "claim_id", "stage"]],
+        context="layer1 evidence-to-claims join",
+        on=["run_id", "claim_id"],
+    )
+    rows = checked_merge(
+        rows,
+        tables["runs"][["run_id", "dataset"]],
+        context="layer1 evidence-to-runs join",
+        on="run_id",
     )
     rows = rows.assign(
         accurate=rows["layer1_code"].eq("EVIDENCE_ACCURATE").astype(int),
@@ -64,8 +104,11 @@ def gold_layer1_rates(tables: dict[str, pd.DataFrame]) -> pd.DataFrame:
 def gold_layer2_scores(
     tables: dict[str, pd.DataFrame], claims_enriched: pd.DataFrame
 ) -> pd.DataFrame:
-    rows = claims_enriched.merge(
-        tables["runs"][["run_id", "dataset", "temperature"]], on="run_id"
+    rows = checked_merge(
+        claims_enriched,
+        tables["runs"][["run_id", "dataset", "temperature"]],
+        context="layer2 claims-to-runs join",
+        on="run_id",
     )
     rows = rows.assign(
         eligible=rows["claim_layer1_code"].eq("EVIDENCE_ACCURATE"),
@@ -98,8 +141,11 @@ def gold_layer2_scores(
 
 
 def gold_arm_c_detection(tables: dict[str, pd.DataFrame]) -> pd.DataFrame:
-    rows = tables["arm_c_defects"].merge(
-        tables["runs"][["run_id", "dataset"]], on="run_id"
+    rows = checked_merge(
+        tables["arm_c_defects"],
+        tables["runs"][["run_id", "dataset"]],
+        context="Arm C defects-to-runs join",
+        on="run_id",
     )
     grouped = rows.groupby(["dataset", "defect"], as_index=False).agg(
         planted_count=("recalled", "size"),
@@ -120,8 +166,11 @@ def gold_arm_c_detection(tables: dict[str, pd.DataFrame]) -> pd.DataFrame:
 def gold_decision_consistency(
     tables: dict[str, pd.DataFrame], claims_enriched: pd.DataFrame
 ) -> pd.DataFrame:
-    rows = claims_enriched.merge(
-        tables["runs"][["run_id", "dataset", "temperature"]], on="run_id"
+    rows = checked_merge(
+        claims_enriched,
+        tables["runs"][["run_id", "dataset", "temperature"]],
+        context="decision consistency claims-to-runs join",
+        on="run_id",
     )
     rows = rows.loc[
         rows["temperature"].eq(0.0)
@@ -168,8 +217,11 @@ def ab_decision_scores(
     expected_scores: list[int],
 ) -> pd.DataFrame:
     """Return one decision's scores across exactly the four AB runs."""
-    rows = claims_enriched.merge(
-        tables["runs"][["run_id", "dataset", "arm"]], on="run_id"
+    rows = checked_merge(
+        claims_enriched,
+        tables["runs"][["run_id", "dataset", "arm"]],
+        context=f"{dataset} decision claims-to-runs join",
+        on="run_id",
     )
     rows = rows.loc[
         rows["dataset"].eq(dataset)
@@ -208,24 +260,34 @@ def gold_model_metrics(tables: dict[str, pd.DataFrame]) -> pd.DataFrame:
         "primary_metric",
         "primary_metric_mean",
     ]]
-    rows = (
-        selected.merge(tables["runs"], on="run_id")
-        .merge(
-            evaluations,
-            left_on=["run_id", "best_model_id"],
-            right_on=["run_id", "model_id"],
-            how="left",
-        )
-        .rename(
-            columns={
-                "best_model_id": "selected_model",
-                "primary_metric_mean": "primary_metric_value",
-            }
-        )
+    model_runs = tables["runs"][
+        ["run_id", "dataset", "arm", "temperature", "repeat"]
+    ]
+    rows = checked_merge(
+        selected,
+        model_runs,
+        context="selected metrics-to-runs join",
+        on="run_id",
+    )
+    rows = checked_merge(
+        rows,
+        evaluations,
+        context="selected metrics-to-evaluations join",
+        left_on=["run_id", "best_model_id"],
+        right_on=["run_id", "model_id"],
+        how="left",
+    ).rename(
+        columns={
+            "best_model_id": "selected_model",
+            "primary_metric_mean": "primary_metric_value",
+        }
     )
 
-    evidence = tables["evidence_refs"].merge(
-        tables["runs"][["run_id", "dataset", "target_column"]], on="run_id"
+    evidence = checked_merge(
+        tables["evidence_refs"],
+        tables["runs"][["run_id", "dataset", "target_column"]],
+        context="evidence-to-runs join",
+        on="run_id",
     )
     expected_key = "col:" + evidence["target_column"] + ":mean"
     base = evidence.loc[
@@ -237,7 +299,13 @@ def gold_model_metrics(tables: dict[str, pd.DataFrame]) -> pd.DataFrame:
         lambda value: float(json.loads(value))
     )
     base = base.groupby("run_id", as_index=False)["positive_class_base_rate"].max()
-    rows = rows.merge(base, on="run_id", how="left")
+    rows = checked_merge(
+        rows,
+        base,
+        context="model metrics-to-base-rate join",
+        on="run_id",
+        how="left",
+    )
     return rows[[
         "run_id",
         "dataset",

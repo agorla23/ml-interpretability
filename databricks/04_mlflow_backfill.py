@@ -100,6 +100,17 @@ arm_c_recall = table("silver_arm_c_defects").groupBy("run_id").agg(
     F.avg(F.col("recalled").cast("double")).alias("arm_c_recall")
 )
 
+# Prefer verdict-derived aggregates over pipeline-reported run_metrics values so
+# every run's metrics come from the same verdict tables used by the gold layer
+# and queries.sql.
+overlap = set(runs.columns)
+for df in (prompt_models, layer1_rates, layer2_scores, arm_c_recall):
+    overlap |= set(df.columns)
+overlap.discard("run_id")
+selected_metrics = selected_metrics.drop(
+    *[c for c in selected_metrics.columns if c in overlap]
+)
+
 backfill_rows = (
     runs.join(selected_metrics, "run_id", "left")
     .join(prompt_models, "run_id", "left")
