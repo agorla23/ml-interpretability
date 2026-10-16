@@ -11,10 +11,10 @@ from sklearn.metrics import f1_score
 from sklearn.model_selection import StratifiedKFold
 from sklearn.pipeline import Pipeline
 
-import evaluation_agent
-from evaluation_agent import evaluate_selected_models
+from mlinterp.agents import evaluation_agent
+from mlinterp.agents.evaluation_agent import evaluate_selected_models
 from evidence_validator import EvidenceRef
-from model_selection_agent import ModelChoice
+from mlinterp.agents.model_selection_agent import ModelChoice
 
 
 class EncodedLabelProbeClassifier(ClassifierMixin, BaseEstimator):

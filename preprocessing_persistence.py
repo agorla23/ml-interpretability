@@ -14,7 +14,7 @@ from layer1_persistence import (
     flatten_evidence_verdicts,
     rollup_claim_verdicts,
 )
-from preprocessing_agent import ColumnPlan, override_rate
+from mlinterp.agents.preprocessing_agent import ColumnPlan, override_rate
 
 
 def _json_default(value: Any) -> Any:

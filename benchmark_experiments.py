@@ -19,7 +19,7 @@ import numpy as np
 
 from benchmark_datasets import BENCHMARKS, DEFAULT_BENCHMARK_DIR, load_benchmark
 from pipeline_supervisor import PipelineState, run_supervised_pipeline
-from preprocessing_agent import preprocessing_batch_count
+from mlinterp.agents.preprocessing_agent import preprocessing_batch_count
 from synthetic_corruptions import inject_synthetic_corruptions, synthetic_corruption_report
 
 

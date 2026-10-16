@@ -25,7 +25,7 @@ from benchmark_experiments import (
 )
 from evidence_validator import EvidenceRef
 from pipeline_supervisor import compute_call_cap
-from preprocessing_agent import derive_column_plan_defaults
+from mlinterp.agents.preprocessing_agent import derive_column_plan_defaults
 from profile_dataset import profile_dataset
 from synthetic_corruptions import (
     HIGH_MISSING_FRACTION,

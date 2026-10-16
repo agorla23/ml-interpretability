@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from evidence_validator import EvidenceRef
-from preprocessing_agent import ColumnPlan, _apply_llm_payloads
+from mlinterp.agents.preprocessing_agent import ColumnPlan, _apply_llm_payloads
 
 
 def test_approved_override_replaces_default_framed_justification_with_final_plan() -> None:

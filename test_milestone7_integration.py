@@ -8,12 +8,12 @@ from types import SimpleNamespace
 
 import pandas as pd
 
-from evaluation_agent import evaluate_selected_models, run_metric_choice_agent
-from evaluation_agent import persist_evaluation_results
+from mlinterp.agents.evaluation_agent import evaluate_selected_models, run_metric_choice_agent
+from mlinterp.agents.evaluation_agent import persist_evaluation_results
 from layer1_persistence import append_layer1_claims, persist_layer1_run, rollup_claim_verdicts
 from layer2_critic import persist_layer2_run, run_layer2_critic
-from model_selection_agent import run_model_selection_agent
-from preprocessing_agent import derive_column_plan_defaults, run_preprocessing_agent
+from mlinterp.agents.model_selection_agent import run_model_selection_agent
+from mlinterp.agents.preprocessing_agent import derive_column_plan_defaults, run_preprocessing_agent
 from profile_dataset import profile_dataset
 
 

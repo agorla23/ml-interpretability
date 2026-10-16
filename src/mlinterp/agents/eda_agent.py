@@ -17,9 +17,9 @@ from evidence_integration import attach_evidence_verdicts_to_claims
 from evidence_validator import Claim, EvidenceRef, EvidenceVerdict
 from layer1_persistence import append_layer1_claims, persist_layer1_run, rollup_claim_verdicts
 from layer2_critic import persist_layer2_run, run_layer2_critic
-from evaluation_agent import evaluate_selected_models, persist_evaluation_results, run_metric_choice_agent
-from model_selection_agent import ModelChoice, run_model_selection_agent
-from preprocessing_agent import ColumnPlan, run_preprocessing_agent
+from mlinterp.agents.evaluation_agent import evaluate_selected_models, persist_evaluation_results, run_metric_choice_agent
+from mlinterp.agents.model_selection_agent import ModelChoice, run_model_selection_agent
+from mlinterp.agents.preprocessing_agent import ColumnPlan, run_preprocessing_agent
 from preprocessing_persistence import persist_preprocessing_run
 from profile_dataset import profile_dataset
 

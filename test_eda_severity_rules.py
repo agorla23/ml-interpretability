@@ -1,4 +1,4 @@
-from eda_agent import _severity_from_evidence
+from mlinterp.agents.eda_agent import _severity_from_evidence
 from evidence_validator import EvidenceRef
 
 

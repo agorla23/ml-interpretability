@@ -16,10 +16,10 @@ import pandas as pd
 from anthropic import Anthropic
 from langgraph.graph import END, START, StateGraph
 
-from eda_agent import Finding, run_eda_agent, severity_violation_rate
+from mlinterp.agents.eda_agent import Finding, run_eda_agent, severity_violation_rate
 from evidence_integration import attach_evidence_verdicts_to_claims
 from evidence_validator import resolve_evidence_value
-from evaluation_agent import (
+from mlinterp.agents.evaluation_agent import (
     MetricChoice,
     deterministic_metric_choice,
     evaluate_selected_models,
@@ -27,8 +27,8 @@ from evaluation_agent import (
 )
 from layer1_persistence import compute_layer1_metrics, rollup_claim_verdicts
 from layer2_critic import compute_layer2_metrics, run_layer2_critic
-from model_selection_agent import ModelChoice, run_model_selection_agent
-from preprocessing_agent import (
+from mlinterp.agents.model_selection_agent import ModelChoice, run_model_selection_agent
+from mlinterp.agents.preprocessing_agent import (
     ColumnPlan,
     _make_plan_from_default,
     derive_column_plan_defaults,

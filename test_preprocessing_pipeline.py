@@ -14,7 +14,7 @@ from sklearn.model_selection import KFold, StratifiedKFold, cross_validate
 from sklearn.pipeline import Pipeline
 
 from evidence_validator import EvidenceRef
-from preprocessing_agent import (
+from mlinterp.agents.preprocessing_agent import (
     PREPROCESSING_BATCH_SIZE,
     ColumnPlan,
     _apply_llm_payloads,

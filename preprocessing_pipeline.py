@@ -19,7 +19,7 @@ from sklearn.model_selection import KFold
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder, OrdinalEncoder, RobustScaler, StandardScaler
 
-from preprocessing_agent import ColumnPlan
+from mlinterp.agents.preprocessing_agent import ColumnPlan
 
 
 @dataclass(frozen=True)

@@ -18,7 +18,7 @@ import pandas as pd
 
 from profile_dataset import profile_dataset
 from pipeline_supervisor import compute_call_cap
-from preprocessing_agent import preprocessing_batch_count
+from mlinterp.agents.preprocessing_agent import preprocessing_batch_count
 
 
 DEFAULT_BENCHMARK_DIR = Path("benchmarks")

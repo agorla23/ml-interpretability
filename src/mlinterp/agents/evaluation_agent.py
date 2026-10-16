@@ -24,7 +24,7 @@ from xgboost import XGBClassifier, XGBRegressor
 
 from evidence_integration import attach_evidence_verdicts_to_claims
 from evidence_validator import Claim, EvidenceRef, EvidenceVerdict
-from model_selection_agent import ModelChoice
+from mlinterp.agents.model_selection_agent import ModelChoice
 
 
 @dataclass
