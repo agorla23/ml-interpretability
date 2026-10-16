@@ -1,6 +1,17 @@
-"""Probe whether Layer 2 assigns low scores to unsupported claims.
+"""Stress test for the Layer-2 critic.
 
-Kept to reproduce the critic-calibration findings from earlier EDA runs.
+Purpose: the real EDA run scored 8/8 claims as a perfect 2.0. Before treating
+that as evidence of a lenient/broken critic, this script checks whether the
+critic is capable of giving a lower score at all. It hand-builds claims with
+real, accurate evidence but decisions that overreach or do not actually follow
+from that evidence, bypassing the EDA agent entirely so the critic is tested in
+isolation.
+
+Run from the project directory with ANTHROPIC_API_KEY set:
+
+    python -m scripts.stress_test_layer2_critic
+
+Kept for reproducibility of the earlier critic-calibration findings.
 """
 
 import os

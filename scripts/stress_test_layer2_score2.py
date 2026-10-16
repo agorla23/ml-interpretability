@@ -1,6 +1,14 @@
-"""Probe the Layer-2 critic's score-2 bucket on the 0-3 scale.
+"""Stress test for the Layer-2 critic's score-2 bucket on the 0-3 scale.
 
-Kept to reproduce the score-calibration findings from earlier runs.
+Context: scores 0, 1, and 3 have all been observed in real output. Score 2,
+"right direction, but incomplete OR thinly evidenced," needs a focused test
+before ``mean_layer2_score`` is treated as a fine-grained metric.
+
+Run from the project directory with ANTHROPIC_API_KEY set:
+
+    python -m scripts.stress_test_layer2_score2
+
+Kept for reproducibility of the earlier score-calibration findings.
 """
 
 import os
