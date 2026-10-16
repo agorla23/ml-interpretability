@@ -8,7 +8,7 @@ import os
 import sys
 from pathlib import Path
 
-from pipeline_supervisor import run_supervised_pipeline
+from mlinterp.pipeline.pipeline_supervisor import run_supervised_pipeline
 
 
 def main() -> int:

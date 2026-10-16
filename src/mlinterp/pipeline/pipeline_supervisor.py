@@ -35,7 +35,7 @@ from mlinterp.agents.preprocessing_agent import (
     override_rate,
     run_preprocessing_agent,
 )
-from preprocessing_pipeline import build_preprocessing_pipeline
+from mlinterp.pipeline.preprocessing_pipeline import build_preprocessing_pipeline
 from mlinterp.profiling.profile_dataset import profile_dataset
 
 

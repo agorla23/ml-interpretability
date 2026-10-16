@@ -22,7 +22,7 @@ from mlinterp.agents.preprocessing_agent import (
     derive_column_plan_defaults,
     run_preprocessing_agent,
 )
-from preprocessing_pipeline import (
+from mlinterp.pipeline.preprocessing_pipeline import (
     KFoldTargetEncoder,
     _build_transformers,
     build_preprocessing_pipeline,

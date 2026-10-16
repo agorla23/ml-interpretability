@@ -20,7 +20,7 @@ from mlinterp.verification.layer2_critic import persist_layer2_run, run_layer2_c
 from mlinterp.agents.evaluation_agent import evaluate_selected_models, persist_evaluation_results, run_metric_choice_agent
 from mlinterp.agents.model_selection_agent import ModelChoice, run_model_selection_agent
 from mlinterp.agents.preprocessing_agent import ColumnPlan, run_preprocessing_agent
-from preprocessing_persistence import persist_preprocessing_run
+from mlinterp.pipeline.preprocessing_persistence import persist_preprocessing_run
 from mlinterp.profiling.profile_dataset import profile_dataset
 
 
@@ -325,12 +325,20 @@ def _print_evaluation_results(results) -> None:
     print()
 
 
+def _repository_root() -> Path:
+    """Find the repository root containing this module's pyproject.toml."""
+    for directory in Path(__file__).resolve().parents:
+        if (directory / "pyproject.toml").is_file():
+            return directory
+    raise FileNotFoundError("Could not find pyproject.toml above eda_agent.py")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run the Claude-backed EDA agent on a CSV file.")
     parser.add_argument(
         "csv_path",
         nargs="?",
-        default=str(Path(__file__).parent / "tests" / "fixtures" / "mini_dataset.csv"),
+        default=str(_repository_root() / "tests" / "fixtures" / "mini_dataset.csv"),
         help="CSV path to profile before running the EDA agent.",
     )
     parser.add_argument("--target-column", default="target")

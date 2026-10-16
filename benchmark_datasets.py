@@ -17,7 +17,7 @@ from typing import Callable
 import pandas as pd
 
 from mlinterp.profiling.profile_dataset import profile_dataset
-from pipeline_supervisor import compute_call_cap
+from mlinterp.pipeline.pipeline_supervisor import compute_call_cap
 from mlinterp.agents.preprocessing_agent import preprocessing_batch_count
 
 
