@@ -11,8 +11,8 @@ from typing import Any, Iterable
 
 from anthropic import Anthropic
 
-from evidence_validator import EvidenceRef, EvidenceVerdict
-from layer2_critic import _call_layer2_critic
+from mlinterp.verification.evidence_validator import EvidenceRef, EvidenceVerdict
+from mlinterp.verification.layer2_critic import _call_layer2_critic
 from mlinterp.agents.preprocessing_agent import ColumnPlan, _final_override_justification
 
 

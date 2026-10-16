@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from evidence_validator import EvidenceRef
+from mlinterp.verification.evidence_validator import EvidenceRef
 from mlinterp.agents.preprocessing_agent import ColumnPlan, _apply_llm_payloads
 
 

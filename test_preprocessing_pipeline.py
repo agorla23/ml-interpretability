@@ -13,7 +13,7 @@ from sklearn.linear_model import LogisticRegression, Ridge
 from sklearn.model_selection import KFold, StratifiedKFold, cross_validate
 from sklearn.pipeline import Pipeline
 
-from evidence_validator import EvidenceRef
+from mlinterp.verification.evidence_validator import EvidenceRef
 from mlinterp.agents.preprocessing_agent import (
     PREPROCESSING_BATCH_SIZE,
     ColumnPlan,

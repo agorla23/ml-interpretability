@@ -10,8 +10,8 @@ from typing import Any
 
 from anthropic import Anthropic
 
-from evidence_validator import resolve_evidence_value
-from layer1_persistence import ClaimVerdict
+from mlinterp.verification.evidence_validator import resolve_evidence_value
+from mlinterp.verification.layer1_persistence import ClaimVerdict
 
 
 @dataclass

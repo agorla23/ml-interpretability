@@ -7,8 +7,8 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
-from evidence_validator import EvidenceVerdict
-from layer1_persistence import (
+from mlinterp.verification.evidence_validator import EvidenceVerdict
+from mlinterp.verification.layer1_persistence import (
     ClaimVerdict,
     compute_layer1_metrics,
     flatten_evidence_verdicts,

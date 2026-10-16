@@ -23,7 +23,7 @@ from benchmark_experiments import (
     validate_preregistration,
     write_preregistration_template,
 )
-from evidence_validator import EvidenceRef
+from mlinterp.verification.evidence_validator import EvidenceRef
 from pipeline_supervisor import compute_call_cap
 from mlinterp.agents.preprocessing_agent import derive_column_plan_defaults
 from profile_dataset import profile_dataset

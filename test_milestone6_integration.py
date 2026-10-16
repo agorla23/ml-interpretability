@@ -10,10 +10,10 @@ from types import SimpleNamespace
 import pandas as pd
 
 from mlinterp.agents.eda_agent import Finding
-from evidence_integration import attach_evidence_verdicts_to_claims
-from evidence_validator import EvidenceRef
-from layer1_persistence import persist_layer1_run, rollup_claim_verdicts
-from layer2_critic import persist_layer2_run, run_layer2_critic
+from mlinterp.verification.evidence_integration import attach_evidence_verdicts_to_claims
+from mlinterp.verification.evidence_validator import EvidenceRef
+from mlinterp.verification.layer1_persistence import persist_layer1_run, rollup_claim_verdicts
+from mlinterp.verification.layer2_critic import persist_layer2_run, run_layer2_critic
 from mlinterp.agents.preprocessing_agent import derive_column_plan_defaults, run_preprocessing_agent
 from preprocessing_persistence import persist_preprocessing_run
 from profile_dataset import profile_dataset

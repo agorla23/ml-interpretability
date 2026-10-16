@@ -1,5 +1,5 @@
 from mlinterp.agents.eda_agent import _severity_from_evidence
-from evidence_validator import EvidenceRef
+from mlinterp.verification.evidence_validator import EvidenceRef
 
 
 def _ref(metric: str, value) -> EvidenceRef:

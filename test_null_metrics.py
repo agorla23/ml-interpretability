@@ -5,8 +5,8 @@ import tempfile
 from dataclasses import asdict
 from pathlib import Path
 
-from layer1_persistence import ClaimVerdict, compute_layer1_metrics
-from layer2_critic import persist_layer2_run
+from mlinterp.verification.layer1_persistence import ClaimVerdict, compute_layer1_metrics
+from mlinterp.verification.layer2_critic import persist_layer2_run
 
 
 def test_empty_layer1_rates_are_none():

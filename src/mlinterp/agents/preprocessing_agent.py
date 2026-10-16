@@ -11,8 +11,8 @@ from typing import TYPE_CHECKING, Any, Literal
 import pandas as pd
 from anthropic import Anthropic
 
-from evidence_integration import attach_evidence_verdicts_to_claims
-from evidence_validator import Claim, EvidenceRef, EvidenceVerdict
+from mlinterp.verification.evidence_integration import attach_evidence_verdicts_to_claims
+from mlinterp.verification.evidence_validator import Claim, EvidenceRef, EvidenceVerdict
 
 if TYPE_CHECKING:
     from sklearn.pipeline import Pipeline

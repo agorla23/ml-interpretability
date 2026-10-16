@@ -22,8 +22,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder
 from xgboost import XGBClassifier, XGBRegressor
 
-from evidence_integration import attach_evidence_verdicts_to_claims
-from evidence_validator import Claim, EvidenceRef, EvidenceVerdict
+from mlinterp.verification.evidence_integration import attach_evidence_verdicts_to_claims
+from mlinterp.verification.evidence_validator import Claim, EvidenceRef, EvidenceVerdict
 from mlinterp.agents.model_selection_agent import ModelChoice
 
 

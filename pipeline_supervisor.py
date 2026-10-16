@@ -17,16 +17,16 @@ from anthropic import Anthropic
 from langgraph.graph import END, START, StateGraph
 
 from mlinterp.agents.eda_agent import Finding, run_eda_agent, severity_violation_rate
-from evidence_integration import attach_evidence_verdicts_to_claims
-from evidence_validator import resolve_evidence_value
+from mlinterp.verification.evidence_integration import attach_evidence_verdicts_to_claims
+from mlinterp.verification.evidence_validator import resolve_evidence_value
 from mlinterp.agents.evaluation_agent import (
     MetricChoice,
     deterministic_metric_choice,
     evaluate_selected_models,
     run_metric_choice_agent,
 )
-from layer1_persistence import compute_layer1_metrics, rollup_claim_verdicts
-from layer2_critic import compute_layer2_metrics, run_layer2_critic
+from mlinterp.verification.layer1_persistence import compute_layer1_metrics, rollup_claim_verdicts
+from mlinterp.verification.layer2_critic import compute_layer2_metrics, run_layer2_critic
 from mlinterp.agents.model_selection_agent import ModelChoice, run_model_selection_agent
 from mlinterp.agents.preprocessing_agent import (
     ColumnPlan,

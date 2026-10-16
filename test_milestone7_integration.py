@@ -10,8 +10,8 @@ import pandas as pd
 
 from mlinterp.agents.evaluation_agent import evaluate_selected_models, run_metric_choice_agent
 from mlinterp.agents.evaluation_agent import persist_evaluation_results
-from layer1_persistence import append_layer1_claims, persist_layer1_run, rollup_claim_verdicts
-from layer2_critic import persist_layer2_run, run_layer2_critic
+from mlinterp.verification.layer1_persistence import append_layer1_claims, persist_layer1_run, rollup_claim_verdicts
+from mlinterp.verification.layer2_critic import persist_layer2_run, run_layer2_critic
 from mlinterp.agents.model_selection_agent import run_model_selection_agent
 from mlinterp.agents.preprocessing_agent import derive_column_plan_defaults, run_preprocessing_agent
 from profile_dataset import profile_dataset

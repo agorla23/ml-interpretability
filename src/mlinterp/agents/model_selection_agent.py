@@ -10,8 +10,8 @@ from typing import Any
 
 from anthropic import Anthropic
 
-from evidence_integration import attach_evidence_verdicts_to_claims
-from evidence_validator import Claim, EvidenceRef, EvidenceVerdict
+from mlinterp.verification.evidence_integration import attach_evidence_verdicts_to_claims
+from mlinterp.verification.evidence_validator import Claim, EvidenceRef, EvidenceVerdict
 
 
 CLASSIFICATION_MODELS = ("logreg", "rf", "gbt", "knn")

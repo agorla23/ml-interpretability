@@ -13,7 +13,7 @@ from sklearn.pipeline import Pipeline
 
 from mlinterp.agents import evaluation_agent
 from mlinterp.agents.evaluation_agent import evaluate_selected_models
-from evidence_validator import EvidenceRef
+from mlinterp.verification.evidence_validator import EvidenceRef
 from mlinterp.agents.model_selection_agent import ModelChoice
 
 

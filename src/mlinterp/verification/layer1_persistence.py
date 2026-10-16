@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Literal
 from uuid import uuid4
 
-from evidence_validator import EvidenceVerdict
+from mlinterp.verification.evidence_validator import EvidenceVerdict
 
 
 Layer1Code = Literal["FABRICATED_EVIDENCE", "EVIDENCE_MISSTATED", "EVIDENCE_ACCURATE"]

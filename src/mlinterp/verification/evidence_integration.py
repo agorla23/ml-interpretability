@@ -5,7 +5,7 @@ from __future__ import annotations
 from types import SimpleNamespace
 from typing import Any
 
-from evidence_validator import Claim, EvidenceVerdict, validate_evidence
+from mlinterp.verification.evidence_validator import Claim, EvidenceVerdict, validate_evidence
 
 
 def _as_validator_claim(claim: Claim | dict[str, Any]) -> Claim | SimpleNamespace:

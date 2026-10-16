@@ -1,6 +1,6 @@
 """Regression tests for scalar, None, boolean, and dict evidence validation."""
 
-from evidence_validator import Claim, EvidenceRef, validate_evidence
+from mlinterp.verification.evidence_validator import Claim, EvidenceRef, validate_evidence
 
 
 def _claim(claimed_value, metric_key="target_class_balance"):

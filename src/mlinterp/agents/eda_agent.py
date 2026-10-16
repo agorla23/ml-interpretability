@@ -13,10 +13,10 @@ from typing import Any, Literal
 import pandas as pd
 from anthropic import Anthropic
 
-from evidence_integration import attach_evidence_verdicts_to_claims
-from evidence_validator import Claim, EvidenceRef, EvidenceVerdict
-from layer1_persistence import append_layer1_claims, persist_layer1_run, rollup_claim_verdicts
-from layer2_critic import persist_layer2_run, run_layer2_critic
+from mlinterp.verification.evidence_integration import attach_evidence_verdicts_to_claims
+from mlinterp.verification.evidence_validator import Claim, EvidenceRef, EvidenceVerdict
+from mlinterp.verification.layer1_persistence import append_layer1_claims, persist_layer1_run, rollup_claim_verdicts
+from mlinterp.verification.layer2_critic import persist_layer2_run, run_layer2_critic
 from mlinterp.agents.evaluation_agent import evaluate_selected_models, persist_evaluation_results, run_metric_choice_agent
 from mlinterp.agents.model_selection_agent import ModelChoice, run_model_selection_agent
 from mlinterp.agents.preprocessing_agent import ColumnPlan, run_preprocessing_agent

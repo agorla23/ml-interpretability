@@ -16,9 +16,9 @@ import os
 import sys
 from pathlib import Path
 
-from evidence_validator import Claim, EvidenceRef
-from layer1_persistence import ClaimVerdict
-from layer2_critic import run_layer2_critic
+from mlinterp.verification.evidence_validator import Claim, EvidenceRef
+from mlinterp.verification.layer1_persistence import ClaimVerdict
+from mlinterp.verification.layer2_critic import run_layer2_critic
 
 
 # Real values pulled from the mini_dataset.csv profile output. These are
