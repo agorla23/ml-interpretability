@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from preprocessing_agent import derive_column_plan_defaults
 from profile_dataset import ZERO_INFLATED_ZERO_FRACTION_THRESHOLD, profile_dataset
@@ -9,6 +10,7 @@ from profile_dataset import ZERO_INFLATED_ZERO_FRACTION_THRESHOLD, profile_datas
 ADULT_DATASET = Path("benchmarks/adult_income.csv")
 
 
+@pytest.mark.requires_benchmark_data(ADULT_DATASET)
 def test_adult_zero_inflated_columns_are_explicit_and_use_robust_scaling() -> None:
     frame = pd.read_csv(ADULT_DATASET)
     profile = profile_dataset(frame, "income", "binary")

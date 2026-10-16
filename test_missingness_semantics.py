@@ -19,6 +19,7 @@ TITANIC_DATASET = Path("benchmarks/titanic.csv")
 MINI_DATASET = Path(__file__).parent / "tests" / "fixtures" / "mini_dataset.csv"
 
 
+@pytest.mark.requires_benchmark_data(TITANIC_DATASET)
 def test_titanic_missingness_uses_target_association_and_drops_boat() -> None:
     frame = pd.read_csv(TITANIC_DATASET)
     profile = profile_dataset(frame, "survived", "binary")
@@ -45,6 +46,7 @@ def test_titanic_missingness_uses_target_association_and_drops_boat() -> None:
     assert body.drop_reason == "has_high_missing"
 
 
+@pytest.mark.requires_benchmark_data(TITANIC_DATASET)
 def test_missingness_drop_priority_is_leakage_then_missingness_then_constant() -> None:
     frame = pd.read_csv(TITANIC_DATASET)
     profile = profile_dataset(frame, "survived", "binary")
