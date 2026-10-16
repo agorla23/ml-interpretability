@@ -15,6 +15,7 @@ id_ed25519
 # Python tooling
 __pycache__/
 *.py[cod]
+*.egg-info/
 .pytest_cache/
 .coverage
 htmlcov/

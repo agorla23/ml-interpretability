@@ -22,21 +22,27 @@ git clone https://github.com/agorla23/ml-interpretability.git
 cd ml-interpretability
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+python -m pip install -e .
 export ANTHROPIC_API_KEY='your-key-here'
 ```
 
 Benchmark datasets are cached locally under `benchmarks/` and are intentionally not committed. Build or refresh the cache with the dataset utility; Home Credit requires a locally downloaded `application_train.csv` source.
 
 ```bash
-python3 benchmark_datasets.py --help
-python3 benchmark_experiments.py --help
+python -m mlinterp.benchmarks.benchmark_datasets --help
+python -m mlinterp.benchmarks.benchmark_experiments --help
 ```
 
 To run a benchmark arm after preparing its local dataset cache and preregistration plan:
 
 ```bash
-python3 benchmark_experiments.py run --dataset titanic --arm ab --temperature 0.0 --repeat 1
+python -m mlinterp.benchmarks.benchmark_experiments run --dataset titanic --arm ab --temperature 0.0 --repeat 1
+```
+
+Run the supervised pipeline on a prepared dataset:
+
+```bash
+python -m mlinterp.pipeline.run_pipeline --dataset tests/fixtures/mini_dataset.csv --target target --task-type binary --run-id example
 ```
 
 Run outputs are written under `runs/<run-id>/`. They include `claims.jsonl`, Layer 1 and Layer 2 verdict files, prompts, errors, and `metrics.json`; those generated artifacts remain local by design.
@@ -68,4 +74,4 @@ ruff check .
 python -m pytest -q
 ```
 
-Tests that require the gitignored benchmark CSVs skip when those files are not present. Use `benchmark_datasets.py` to build the local benchmark-data cache when you want to run the full suite.
+Tests that require the gitignored benchmark CSVs skip when those files are not present. Use `python -m mlinterp.benchmarks.benchmark_datasets` to build the local benchmark-data cache when you want to run the full suite.
