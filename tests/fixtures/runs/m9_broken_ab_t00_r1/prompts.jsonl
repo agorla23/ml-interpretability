@@ -1,0 +1,1 @@
+{"stage":"eda","latency_seconds":0.1,"tokens":{"input":1,"output":1},"prompt":{"model":"fixture-model","temperature":0.0,"max_tokens":10},"raw_response":{"id":"fixture-broken","model":"fixture-model","stop_reason":"end_turn"},"error":null}

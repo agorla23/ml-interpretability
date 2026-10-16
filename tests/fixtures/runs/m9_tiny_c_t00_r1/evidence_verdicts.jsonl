@@ -1,0 +1,4 @@
+{"claim_id":"eda_001","metric_key":"col:SYNTH_LEAKED:leakage_suspect","layer1_code":"EVIDENCE_ACCURATE"}
+{"claim_id":"prep_001","metric_key":"col:age:is_skewed","layer1_code":"EVIDENCE_ACCURATE"}
+{"claim_id":"model_001","metric_key":"n_rows","layer1_code":"EVIDENCE_ACCURATE"}
+{"claim_id":"evaluation_001","metric_key":"target:is_imbalanced","layer1_code":"EVIDENCE_ACCURATE"}

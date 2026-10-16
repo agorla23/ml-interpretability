@@ -1,0 +1,1 @@
+{"model_id":"knn","rank":1,"primary_metric":"roc_auc","primary_metric_mean":0.7,"primary_metric_std":0.1,"secondary_metrics":{},"train_score_mean":0.75,"val_score_mean":0.7,"train_val_gap":0.05,"usable_folds":3,"overfitting_flag":false}

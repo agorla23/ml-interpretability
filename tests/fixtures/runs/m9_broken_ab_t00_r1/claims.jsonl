@@ -1,0 +1,4 @@
+{"claim_id":"prep_eligible","stage":"preprocess","decision":"drop identifier","confidence":0.9,"justification":"Structured plan","column":"identifier","action":"drop","encoding":"none","imputation":"none","scaling":"none","is_override":false,"override_reason":"","rule_derived_action":"drop","evidence":[],"evidence_verdicts":[]}
+{"claim_id":"model_ineligible","stage":"model_selection","decision":"REJECT","confidence":0.8,"justification":"Structured rejection","model_id":"knn","rank":null,"is_rejection":true,"evidence":[],"evidence_verdicts":[]}
+{"claim_id":"eda_unkeyable","stage":"eda","decision":"Narrative-only finding","confidence":0.7,"justification":"No structured decision flag","severity":"info","llm_stated_severity":"info","rule_derived_severity":"info","severity_rule_violation":false,"evidence":[{"metric_key":"col:age:corr_with_target","claimed_value":0.2}],"evidence_verdicts":[]}
+{not valid json}

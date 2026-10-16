@@ -1,0 +1,1 @@
+{"stage":"eda","latency_seconds":0.1,"tokens":{"input":10,"output":5},"prompt":{"model":"fixture-model","temperature":0.0,"max_tokens":100,"system":"fixture","messages":[{"role":"user","content":"fixture"}],"tools":[],"tool_choice":{}},"raw_response":{"id":"fixture-response","model":"fixture-model","stop_reason":"tool_use","content":[]},"error":null}
