@@ -17,10 +17,10 @@ from typing import Callable, Literal
 import pandas as pd
 import numpy as np
 
-from benchmark_datasets import BENCHMARKS, DEFAULT_BENCHMARK_DIR, load_benchmark
+from mlinterp.benchmarks.benchmark_datasets import BENCHMARKS, DEFAULT_BENCHMARK_DIR, load_benchmark
 from mlinterp.pipeline.pipeline_supervisor import PipelineState, run_supervised_pipeline
 from mlinterp.agents.preprocessing_agent import preprocessing_batch_count
-from synthetic_corruptions import inject_synthetic_corruptions, synthetic_corruption_report
+from mlinterp.benchmarks.synthetic_corruptions import inject_synthetic_corruptions, synthetic_corruption_report
 
 
 Arm = Literal["ab", "c"]

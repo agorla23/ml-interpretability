@@ -9,7 +9,7 @@ from types import SimpleNamespace
 import pandas as pd
 import pytest
 
-from benchmark_experiments import (
+from mlinterp.benchmarks.benchmark_experiments import (
     ExperimentRun,
     _arm_c_recall,
     _expected_value_matches,
@@ -27,7 +27,7 @@ from mlinterp.verification.evidence_validator import EvidenceRef
 from mlinterp.pipeline.pipeline_supervisor import compute_call_cap
 from mlinterp.agents.preprocessing_agent import derive_column_plan_defaults
 from mlinterp.profiling.profile_dataset import profile_dataset
-from synthetic_corruptions import (
+from mlinterp.benchmarks.synthetic_corruptions import (
     HIGH_MISSING_FRACTION,
     SYNTH_CONSTANT,
     SYNTH_HIGH_MISSING,
