@@ -35,6 +35,7 @@ from mlinterp.agents.preprocessing_agent import (
     override_rate,
     run_preprocessing_agent,
 )
+from mlinterp.pipeline.environment_capture import write_environment_snapshot
 from mlinterp.pipeline.preprocessing_pipeline import build_preprocessing_pipeline
 from mlinterp.profiling.profile_dataset import profile_dataset
 
@@ -174,6 +175,7 @@ class PipelineSupervisor:
         self.state = state
         self.run_dir = Path(runs_dir) / state.run_id
         self.run_dir.mkdir(parents=True, exist_ok=True)
+        write_environment_snapshot(self.run_dir)
         self.attempt_started_at = datetime.now(timezone.utc)
         self.attempt_id = (
             f"{self.attempt_started_at.strftime('%Y%m%dT%H%M%S%fZ')}_{uuid4().hex[:8]}"
