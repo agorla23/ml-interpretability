@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import io
 import json
 import os
 import shutil
@@ -15,7 +14,6 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Callable
 
-import numpy as np
 import pandas as pd
 
 from profile_dataset import profile_dataset

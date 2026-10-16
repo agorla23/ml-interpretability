@@ -12,7 +12,7 @@ class _FakeMessages:
 
     def create(self, **kwargs):
         self.calls.append(kwargs)
-        payload = json.loads(kwargs["messages"][0]["content"])
+        json.loads(kwargs["messages"][0]["content"])
         return SimpleNamespace(
             content=[
                 SimpleNamespace(

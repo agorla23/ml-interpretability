@@ -2,3 +2,7 @@
 markers = [
     "requires_benchmark_data(*paths): requires local gitignored benchmark CSVs",
 ]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
+ignore = ["E701"]

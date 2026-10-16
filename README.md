@@ -1,5 +1,7 @@
 # ML Interpretability Pipeline
 
+[![CI](https://github.com/agorla23/ml-interpretability/actions/workflows/ci.yml/badge.svg)](https://github.com/agorla23/ml-interpretability/actions/workflows/ci.yml)
+
 An evidence-backed, LLM-assisted pipeline for analyzing tabular machine-learning datasets. It profiles a dataset, asks an LLM for structured decisions, verifies the factual citations in those decisions, and persists the artifacts needed to inspect a run afterward.
 
 ## Architecture
@@ -48,3 +50,22 @@ See [FINDINGS.md](FINDINGS.md) for the concise record of confirmed benchmark fin
 ```bash
 python3 -m pytest -q
 ```
+
+## Development
+
+Create and activate a virtual environment, then install the runtime and development dependencies:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements-dev.txt
+```
+
+Run linting and tests before opening a pull request:
+
+```bash
+ruff check .
+python -m pytest -q
+```
+
+Tests that require the gitignored benchmark CSVs skip when those files are not present. Use `benchmark_datasets.py` to build the local benchmark-data cache when you want to run the full suite.
