@@ -11,7 +11,7 @@ import pandas as pd
 
 from pipeline_supervisor import compute_call_cap, run_supervised_pipeline
 from mlinterp.agents.preprocessing_agent import derive_column_plan_defaults
-from profile_dataset import profile_dataset
+from mlinterp.profiling.profile_dataset import profile_dataset
 
 
 DATASET = str(Path(__file__).parent / "tests" / "fixtures" / "mini_dataset.csv")

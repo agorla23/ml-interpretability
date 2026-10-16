@@ -21,7 +21,7 @@ from mlinterp.agents.evaluation_agent import evaluate_selected_models, persist_e
 from mlinterp.agents.model_selection_agent import ModelChoice, run_model_selection_agent
 from mlinterp.agents.preprocessing_agent import ColumnPlan, run_preprocessing_agent
 from preprocessing_persistence import persist_preprocessing_run
-from profile_dataset import profile_dataset
+from mlinterp.profiling.profile_dataset import profile_dataset
 
 
 Severity = Literal["info", "warn", "critical"]

@@ -36,7 +36,7 @@ from mlinterp.agents.preprocessing_agent import (
     run_preprocessing_agent,
 )
 from preprocessing_pipeline import build_preprocessing_pipeline
-from profile_dataset import profile_dataset
+from mlinterp.profiling.profile_dataset import profile_dataset
 
 
 @dataclass

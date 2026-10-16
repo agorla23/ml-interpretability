@@ -27,7 +27,7 @@ from preprocessing_pipeline import (
     _build_transformers,
     build_preprocessing_pipeline,
 )
-from profile_dataset import profile_dataset
+from mlinterp.profiling.profile_dataset import profile_dataset
 
 
 MINI_DATASET = Path(__file__).parent / "tests" / "fixtures" / "mini_dataset.csv"

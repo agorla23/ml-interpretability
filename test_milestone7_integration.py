@@ -14,7 +14,7 @@ from mlinterp.verification.layer1_persistence import append_layer1_claims, persi
 from mlinterp.verification.layer2_critic import persist_layer2_run, run_layer2_critic
 from mlinterp.agents.model_selection_agent import run_model_selection_agent
 from mlinterp.agents.preprocessing_agent import derive_column_plan_defaults, run_preprocessing_agent
-from profile_dataset import profile_dataset
+from mlinterp.profiling.profile_dataset import profile_dataset
 
 
 MINI_DATASET = Path(__file__).parent / "tests" / "fixtures" / "mini_dataset.csv"

@@ -8,7 +8,7 @@ import pandas as pd
 import pytest
 
 from mlinterp.agents.preprocessing_agent import derive_column_plan_defaults
-from profile_dataset import (
+from mlinterp.profiling.profile_dataset import (
     MISSINGNESS_INFORMATIVE_CORR_THRESHOLD,
     MISSINGNESS_LEAKAGE_CORR_THRESHOLD,
     profile_dataset,

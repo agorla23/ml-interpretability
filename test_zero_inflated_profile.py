@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 
 from mlinterp.agents.preprocessing_agent import derive_column_plan_defaults
-from profile_dataset import ZERO_INFLATED_ZERO_FRACTION_THRESHOLD, profile_dataset
+from mlinterp.profiling.profile_dataset import ZERO_INFLATED_ZERO_FRACTION_THRESHOLD, profile_dataset
 
 
 ADULT_DATASET = Path("benchmarks/adult_income.csv")
