@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
-from rescore_prep_override_fix import rescore_historical_overrides
+from scripts.rescore_prep_override_fix import rescore_historical_overrides
 
 
 class _FakeMessages:

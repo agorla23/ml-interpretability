@@ -1,4 +1,7 @@
-"""Re-score historical preprocessing overrides without rerunning a pipeline."""
+"""Re-score historical preprocessing overrides without rerunning a pipeline.
+
+Kept to reproduce the override-justification findings from completed runs.
+"""
 
 from __future__ import annotations
 

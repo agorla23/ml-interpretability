@@ -1,4 +1,7 @@
-"""Recompute historical EDA severity violations without modifying run artifacts."""
+"""Recompute historical EDA severity violations without modifying run artifacts.
+
+Kept to reproduce the severity-analysis findings from completed benchmark runs.
+"""
 
 from __future__ import annotations
 
