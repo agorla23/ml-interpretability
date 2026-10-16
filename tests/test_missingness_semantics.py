@@ -16,7 +16,7 @@ from mlinterp.profiling.profile_dataset import (
 
 
 TITANIC_DATASET = Path("benchmarks/titanic.csv")
-MINI_DATASET = Path(__file__).parent / "tests" / "fixtures" / "mini_dataset.csv"
+MINI_DATASET = Path(__file__).parent / "fixtures" / "mini_dataset.csv"
 
 
 @pytest.mark.requires_benchmark_data(TITANIC_DATASET)

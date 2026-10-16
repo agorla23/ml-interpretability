@@ -583,7 +583,7 @@ def run_preprocessing_agent(
     logs = _apply_llm_payloads(plans, payloads, raw_profile)
 
     # Construction only: fitting is reserved for the evaluation-stage CV loop.
-    from preprocessing_pipeline import build_preprocessing_pipeline
+    from mlinterp.pipeline.preprocessing_pipeline import build_preprocessing_pipeline
 
     pipeline = build_preprocessing_pipeline(plans, raw_profile)
     pipeline.preprocessing_logs = logs

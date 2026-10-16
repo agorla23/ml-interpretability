@@ -19,7 +19,7 @@ from mlinterp.pipeline.preprocessing_persistence import persist_preprocessing_ru
 from mlinterp.profiling.profile_dataset import profile_dataset
 
 
-MINI_DATASET = Path(__file__).parent / "tests" / "fixtures" / "mini_dataset.csv"
+MINI_DATASET = Path(__file__).parent / "fixtures" / "mini_dataset.csv"
 
 
 class FakeMessages:
