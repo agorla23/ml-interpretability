@@ -31,5 +31,8 @@ benchmarks/preregistered_plans.json
 
 # Generated pipeline artifacts and ad hoc analysis output
 runs/
+lakehouse_export/
 *.jsonl
 *_output.txt
+!tests/fixtures/runs/
+!tests/fixtures/runs/**
