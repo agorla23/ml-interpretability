@@ -47,6 +47,48 @@ python -m mlinterp.pipeline.run_pipeline --dataset tests/fixtures/mini_dataset.c
 
 Run outputs are written under `runs/<run-id>/`. They include `claims.jsonl`, Layer 1 and Layer 2 verdict files, prompts, errors, and `metrics.json`; those generated artifacts remain local by design.
 
+## Lakehouse and experiment tracking
+
+The Databricks analysis layer is additive and reads persisted benchmark artifacts:
+
+```text
+runs/ → Parquet export → Unity Catalog volume → bronze/silver/gold Delta
+                                                    ├── MLflow
+                                                    └── SQL findings checks
+```
+
+First, build the normalized local export. The command accepts only the Milestone 9 run-directory naming convention and writes source hashes and row counts to `manifest.json`.
+
+```bash
+python -m mlinterp.lakehouse.export --runs-dir runs --out lakehouse_export/
+python -m scripts.verify_lakehouse_gold --export-dir lakehouse_export/
+```
+
+The Databricks notebooks default to catalog `workspace`, schema `mlinterp`, and volume `raw`; all three can be changed with notebook widgets. To upload and run the layer in the default Free Edition workspace:
+
+1. Configure the current Databricks CLI for the workspace, then copy the complete export directory into the existing Unity Catalog volume:
+
+   ```bash
+   databricks fs cp lakehouse_export \
+     dbfs:/Volumes/workspace/mlinterp/raw/lakehouse_export \
+     --recursive --overwrite
+   ```
+
+2. Import the source-format notebooks into your own workspace folder (replace the email address):
+
+   ```bash
+   databricks workspace import-dir databricks \
+     /Users/you@example.com/mlinterp-databricks --overwrite
+   ```
+
+   The same files can instead be imported from the Workspace UI. The first-line `Databricks notebook source` marker and `COMMAND` separators preserve notebook cells.
+
+3. Attach serverless compute and run `01_bronze`, `02_silver`, `03_gold`, then `04_mlflow_backfill`, in that order. Bronze checks every loaded row count against the uploaded manifest; silver records schema, key, deduplication, and join checks; gold contains only aggregate analysis tables.
+4. Open `databricks/queries.sql` in the SQL editor and run each statement against `workspace.mlinterp`.
+5. Review the experiment at `/Shared/mlinterp-benchmarks`. If `/Shared` is not writable, the backfill notebook reports and uses `/Users/<current-user>/mlinterp-benchmarks`. Re-running it is safe because an existing MLflow run with the same `run_id` tag is skipped.
+
+No API key is needed for export, notebook execution, SQL queries, or MLflow backfill. Prompt payloads remain in `silver_prompt_calls`; no gold table includes them.
+
 ## Findings
 
 See [FINDINGS.md](FINDINGS.md) for the concise record of confirmed benchmark findings and fixes referenced by the accompanying writeup. It distinguishes pipeline correctness issues from dataset-specific outcomes and points to the persisted artifacts used for review.
