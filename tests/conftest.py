@@ -17,5 +17,5 @@ def pytest_runtest_setup(item: pytest.Item) -> None:
         pytest.skip(
             "benchmark data not available: "
             f"{', '.join(str(path) for path in missing)}; "
-            "build it with benchmark_datasets.py"
+            "build it with python -m mlinterp.benchmarks.benchmark_datasets"
         )
