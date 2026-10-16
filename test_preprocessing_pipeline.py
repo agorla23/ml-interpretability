@@ -8,6 +8,7 @@ from types import SimpleNamespace
 
 import numpy as np
 import pandas as pd
+import pytest
 from sklearn.linear_model import LogisticRegression, Ridge
 from sklearn.model_selection import KFold, StratifiedKFold, cross_validate
 from sklearn.pipeline import Pipeline
@@ -160,6 +161,7 @@ def _plans_for_columns(profile_path: Path, target_column: str, columns: list[str
     ]
 
 
+@pytest.mark.requires_benchmark_data(AMES_DATASET, HOME_CREDIT_DATASET)
 def test_numeric_categories_with_missing_values_cross_validate_on_ames_and_home_credit() -> None:
     ames_columns = ["Bsmt.Full.Bath", "Bsmt.Half.Bath", "Garage.Cars"]
     home_credit_columns = [

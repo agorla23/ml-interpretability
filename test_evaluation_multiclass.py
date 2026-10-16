@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+import pytest
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.compose import ColumnTransformer
 from sklearn.metrics import f1_score
@@ -112,6 +113,7 @@ def _assert_identity_label_evaluation(
     )
 
 
+@pytest.mark.requires_benchmark_data("benchmarks/wine_quality_red.csv")
 def test_wine_quality_labels_are_encoded_for_xgboost_and_reported_as_original_values() -> None:
     frame = pd.read_csv("benchmarks/wine_quality_red.csv")
     target = "quality"

@@ -47,6 +47,7 @@ def test_fixed_matrix_has_25_unique_executions() -> None:
     assert all(run.temperature == 0.0 and run.repeat == 1 for run in runs if run.arm == "c")
 
 
+@pytest.mark.requires_benchmark_data("benchmarks/titanic.csv")
 def test_titanic_arm_c_injection_is_reproducible_and_measured() -> None:
     frame = pd.read_csv("benchmarks/titanic.csv")
     first = inject_synthetic_corruptions(frame, "survived", "binary")
