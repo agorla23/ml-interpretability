@@ -1,0 +1,1 @@
+{"model_id":"gbt","rank":1,"primary_metric":"roc_auc","primary_metric_mean":0.81,"primary_metric_std":0.02,"secondary_metrics":{"f1":{"mean":0.72,"std":0.03}},"train_score_mean":0.86,"val_score_mean":0.81,"train_val_gap":0.05,"usable_folds":5,"overfitting_flag":false}

@@ -6,3 +6,4 @@ anthropic==0.122.0
 scikit-learn==1.7.2
 xgboost==3.4.1
 langgraph==1.2.11
+pyarrow==18.1.0

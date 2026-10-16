@@ -1,0 +1,4 @@
+{"claim_id":"prep_eligible","stage":"preprocess","citation_layer1_codes":[],"claim_layer1_code":"EVIDENCE_ACCURATE"}
+{"claim_id":"model_ineligible","stage":"model_selection","citation_layer1_codes":["EVIDENCE_MISSTATED"],"claim_layer1_code":"EVIDENCE_MISSTATED"}
+{"claim_id":"eda_unkeyable","stage":"eda","citation_layer1_codes":[],"claim_layer1_code":"EVIDENCE_ACCURATE"}
+{"claim_id":"orphan_claim","stage":"eda","citation_layer1_codes":[],"claim_layer1_code":"EVIDENCE_MISSTATED"}

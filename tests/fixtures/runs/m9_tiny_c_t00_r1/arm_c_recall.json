@@ -1,0 +1,1 @@
+{"defects":[{"column":"SYNTH_LEAKED","defect":"leakage","expected_metric_key":"col:SYNTH_LEAKED:leakage_suspect","matching_claim_ids":["eda_001"],"recalled":true}],"recall":1,"total":1}

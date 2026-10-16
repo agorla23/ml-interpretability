@@ -1,0 +1,4 @@
+{"claim_id":"eda_001","stage":"eda","citation_layer1_codes":["EVIDENCE_ACCURATE"],"claim_layer1_code":"EVIDENCE_ACCURATE"}
+{"claim_id":"prep_001","stage":"preprocess","citation_layer1_codes":["EVIDENCE_ACCURATE"],"claim_layer1_code":"EVIDENCE_ACCURATE"}
+{"claim_id":"model_001","stage":"model_selection","citation_layer1_codes":["EVIDENCE_ACCURATE"],"claim_layer1_code":"EVIDENCE_ACCURATE"}
+{"claim_id":"evaluation_001","stage":"evaluation","citation_layer1_codes":["EVIDENCE_ACCURATE"],"claim_layer1_code":"EVIDENCE_ACCURATE"}
