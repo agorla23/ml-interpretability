@@ -159,6 +159,44 @@ def gold_decision_consistency(
     )
 
 
+def ab_decision_scores(
+    tables: dict[str, pd.DataFrame],
+    claims_enriched: pd.DataFrame,
+    *,
+    dataset: str,
+    decision_key: str,
+    expected_scores: list[int],
+) -> pd.DataFrame:
+    """Return one decision's scores across exactly the four AB runs."""
+    rows = claims_enriched.merge(
+        tables["runs"][["run_id", "dataset", "arm"]], on="run_id"
+    )
+    rows = rows.loc[
+        rows["dataset"].eq(dataset)
+        & rows["arm"].eq("ab")
+        & rows["decision_key"].eq(decision_key)
+        & rows["layer2_score"].notna()
+    ].sort_values("run_id")
+    score_by_run = [
+        {"run_id": row.run_id, "layer2_score": int(row.layer2_score)}
+        for row in rows.itertuples()
+    ]
+    scores = sorted(item["layer2_score"] for item in score_by_run)
+    return pd.DataFrame(
+        [
+            {
+                "dataset": dataset,
+                "decision_key": decision_key,
+                "run_count": len(score_by_run),
+                "score_by_run": score_by_run,
+                "layer2_scores": scores,
+                "expected_layer2_scores": expected_scores,
+                "matches_expected": scores == expected_scores,
+            }
+        ]
+    )
+
+
 def gold_model_metrics(tables: dict[str, pd.DataFrame]) -> pd.DataFrame:
     selected = tables["run_metrics"].loc[
         tables["run_metrics"]["reported_arm"].ne("B")
@@ -244,14 +282,27 @@ def print_query_results(export_dir: Path) -> None:
     defect_query["all_planted"] = arm_c.planted_count.sum()
     print(defect_query.to_string(index=False))
 
-    print("\nQuery 2: Adult Income KNN rejection")
-    knn_query = consistency.loc[
-        consistency["dataset"].eq("adult_income")
-        & consistency["decision_key"].eq("model_selection|knn|reject")
-    ]
-    print(knn_query.to_string(index=False))
+    print("\nQuery 2: Ames Housing KNN rejection across four AB runs")
+    ames_knn = ab_decision_scores(
+        tables,
+        claims_enriched,
+        dataset="ames_housing",
+        decision_key="model_selection|knn|reject",
+        expected_scores=[1, 1, 3, 3],
+    )
+    print(ames_knn.to_string(index=False))
 
-    print("\nQuery 3: Layer-2 coverage gate")
+    print("\nQuery 3: Adult Income KNN rejection across four AB runs")
+    adult_income_knn = ab_decision_scores(
+        tables,
+        claims_enriched,
+        dataset="adult_income",
+        decision_key="model_selection|knn|reject",
+        expected_scores=[2, 3, 3, 3],
+    )
+    print(adult_income_knn.to_string(index=False))
+
+    print("\nQuery 4: Layer-2 coverage gate")
     gate_columns = [
         "layer1_eligible_count",
         "layer2_claim_count",
@@ -261,7 +312,7 @@ def print_query_results(export_dir: Path) -> None:
     ]
     print(layer2[gate_columns].sum().to_frame().T.to_string(index=False))
 
-    print("\nQuery 4: Home Credit PR-AUC and baseline")
+    print("\nQuery 5: Home Credit PR-AUC and baseline")
     home_credit = models.loc[models.dataset.eq("home_credit")].copy()
     home_credit["absolute_lift"] = (
         home_credit.primary_metric_value - home_credit.positive_class_base_rate
@@ -277,7 +328,7 @@ def print_query_results(export_dir: Path) -> None:
         ]].sort_values("run_id").to_string(index=False)
     )
 
-    print("\nQuery 5: mean Layer-2 score by stage and temperature")
+    print("\nQuery 6: mean Layer-2 score by stage and temperature")
     stage_temperature = layer2.groupby(["stage", "temperature"], as_index=False).agg(
         scored_claims=("layer2_claim_count", "sum"),
         weighted_score_total=(

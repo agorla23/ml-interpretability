@@ -14,18 +14,62 @@ SELECT
 FROM gold_arm_c_detection
 ORDER BY dataset, defect;
 
--- "Adult Income rejected KNN with Layer-2 scores 1, 1, 3, 3 across the
--- repeated temperature-0.0 benchmark runs."
+-- "A KNN rejection on Ames Housing, verbatim identical in two runs, scored 1, 1, 3, 3 across the four AB runs."
+WITH ames_knn AS (
+  SELECT
+    r.dataset,
+    c.decision_key,
+    COUNT(*) AS run_count,
+    SORT_ARRAY(
+      COLLECT_LIST(
+        NAMED_STRUCT(
+          'run_id', r.run_id,
+          'layer2_score', CAST(c.layer2_score AS INT)
+        )
+      )
+    ) AS score_by_run,
+    ARRAY_SORT(COLLECT_LIST(CAST(c.layer2_score AS INT))) AS layer2_scores
+  FROM silver_claims_enriched AS c
+  INNER JOIN silver_runs AS r ON c.run_id = r.run_id
+  WHERE r.dataset = 'ames_housing'
+    AND r.arm = 'ab'
+    AND c.decision_key = 'model_selection|knn|reject'
+  GROUP BY r.dataset, c.decision_key
+)
 SELECT
-  dataset,
-  decision_key,
-  run_count,
-  score_by_run,
-  layer2_scores,
-  score_spread
-FROM gold_decision_consistency
-WHERE dataset = 'adult_income'
-  AND decision_key = 'model_selection|knn|reject';
+  *,
+  ARRAY(1, 1, 3, 3) AS expected_layer2_scores,
+  layer2_scores = ARRAY(1, 1, 3, 3) AS matches_expected
+FROM ames_knn;
+
+-- "For contrast, Adult Income's KNN rejection scored 2, 3, 3, 3 across the
+-- four AB runs."
+WITH adult_income_knn AS (
+  SELECT
+    r.dataset,
+    c.decision_key,
+    COUNT(*) AS run_count,
+    SORT_ARRAY(
+      COLLECT_LIST(
+        NAMED_STRUCT(
+          'run_id', r.run_id,
+          'layer2_score', CAST(c.layer2_score AS INT)
+        )
+      )
+    ) AS score_by_run,
+    ARRAY_SORT(COLLECT_LIST(CAST(c.layer2_score AS INT))) AS layer2_scores
+  FROM silver_claims_enriched AS c
+  INNER JOIN silver_runs AS r ON c.run_id = r.run_id
+  WHERE r.dataset = 'adult_income'
+    AND r.arm = 'ab'
+    AND c.decision_key = 'model_selection|knn|reject'
+  GROUP BY r.dataset, c.decision_key
+)
+SELECT
+  *,
+  ARRAY(2, 3, 3, 3) AS expected_layer2_scores,
+  layer2_scores = ARRAY(2, 3, 3, 3) AS matches_expected
+FROM adult_income_knn;
 
 -- "The Layer-2 coverage gate excluded exactly two EVIDENCE_MISSTATED claims
 -- and scored all 1,625 Layer-1-eligible claims."

@@ -21,6 +21,16 @@ This file is the review-oriented record for the benchmark matrix. Generated run 
 | Synthetic Arm C | Arm C adds reproducible constant, target-leak, and high-missingness columns without modifying Arm A/B or historical artifacts. | It provides known ground truth for measuring detection and preprocessing behavior. |
 | EDA coverage | Synthetic high-missingness columns were not always mentioned by EDA on the widest datasets, even when the deterministic preprocessing rule dropped them. | This is an EDA coverage miss, distinct from a preprocessing failure. |
 
+## Corrections
+
+The writeup attributed a repeated KNN-rejection pattern with Layer-2 scores
+`1, 1, 3, 3` to Adult Income. Reproducing the finding from the raw run artifacts
+through the lakehouse showed that the pattern belongs to **Ames Housing** across
+its four AB runs. Under the Layer-2 rubric, score `1` means the evidence was
+described honestly but the decision moved in the wrong direction; no KNN claim
+has a recorded score of `0`. The corresponding Adult Income KNN rejection scored
+`2, 3, 3, 3` across its four AB runs.
+
 ## How to Read a Run
 
 - `claims.jsonl`: stage claims and their cited evidence.
